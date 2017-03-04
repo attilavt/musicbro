@@ -19,7 +19,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/likes', function (req, res) {
-  es.sendfile('likelist.html', {root: __dirname })
+  res.sendfile('likelist.html', {root: __dirname })
 });
 
 // set the port of our application
