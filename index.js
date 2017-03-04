@@ -1,5 +1,5 @@
 var VERIFY_TOKEN = 'test5050';
-var PAGE_ACCESS_TOKEN = '<YOUR_PAGE_ACCESS_TOKEN>';
+var PAGE_ACCESS_TOKEN = 'EAAQl84kLMuABAFDrmEogZCZAD9dGwzsOww7OYaBeabwqmZBghuT0LE4ZAyyfAJMwPKYRZCzfWMpyQoqBOBx5vPIFfmRXVJA7hZCWRBH1Dy6SB2TVVzHyL4gz5raXnKgeOBWj4wIctHs48rTwrGqiFPdC2BJZBCveBuQ0wYXH7qjWwZDZD';
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
