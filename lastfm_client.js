@@ -7,7 +7,7 @@ const apiKey = "49fcfbff9157101ca6a56e5c0fbf737b";
 const baseUrl = "http://ws.audioscrobbler.com/2.0/";
 const GET = "GET";
 
-var debugMode = true;
+var debugMode = false;
 
 var debug = function (msg) {
     if(debugMode)
@@ -16,18 +16,19 @@ var debug = function (msg) {
 
 var request = require('request');
 var querystring = require("querystring");
+var youtubeClient = require('./youtube_client');
 
 var sendRequest = function(path, method, callback) {
-    console.log("[REST] Sending " + method + " request to " + baseUrl + path + "...");
+    console.log("- [REST] Sending " + method + " request to " + baseUrl + path + "...");
     if(method === GET) {
         request(baseUrl + path, function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log("[REST] Success sending " + method + " request to " + baseUrl + path);
-                debug("[REST] body: " + body);
+                console.log("- [REST] Success sending " + method + " request to " + baseUrl + path);
+                debug("- [REST] body: " + body);
                 callback(JSON.parse(body));
             } else {
                 var theResponse = response ? response.statusCode : null;
-                console.log("[REST] Error sending " + method + " request to " + baseUrl + path + " -> \nStatus: "+theResponse + ": \nError: " + error + "\nBody: " + body);
+                console.log("- [REST] Error sending " + method + " request to " + baseUrl + path + " -> \nStatus: "+theResponse + ": \nError: " + error + "\nBody: " + body);
             }
         });
     }
@@ -62,7 +63,6 @@ var getTagTopArtists =function (tag, limit, deepCallback) {
 
         if(deepCallback)
             deepCallback(result);
-        return result;
     };
 
     return sendRequest(leUrl, GET, callback);
@@ -76,7 +76,7 @@ var getTagTopArtists =function (tag, limit, deepCallback) {
  */
 var getArtistTopTracks =function (name, limit, withYoutubeLink, deepCallback) {
 
-    console.log("[LASTFM] Setting up artist top tracks search for " + name);
+    console.log("[LASTFM ATT] Setting up artist top tracks search for " + name);
 
     var query = querystring.stringify({method:"artist.getTopTracks", artist: name, api_key: apiKey, format:"json", limit:limit});
     var leUrl =  "?"+query;
@@ -90,14 +90,32 @@ var getArtistTopTracks =function (name, limit, withYoutubeLink, deepCallback) {
 
         var result = [];
 
+        var youtubeLinkRequested =0;
+        var youtubeLinkReceived = 0;
+
+        var registerYoutubeLink = function(video) {
+            youtubeLinkReceived++;
+            debug("[LASTFM ATT] Registering video " + video + " " + video.url+ " " + youtubeLinkReceived + "/"+ youtubeLinkRequested);
+            result.push(video);
+            if(youtubeLinkReceived== youtubeLinkRequested) {
+                debug("[LASTFM ATT] Delivering " + result);
+                deepCallback(result);
+            }
+        };
+
         for(var i= 0; i < list.length;i++) {
-            debug("Item " + list[i].name);
-            result.push({artist:name, name:list[i].name});
+            var track = list[i].name;
+            debug("Item " + track);
+            if(!withYoutubeLink) {
+                result.push({artist:name, name:track.name});
+            } else {
+                youtubeLinkRequested++;
+                youtubeClient.getVideoLink(name, track, registerYoutubeLink);
+            }
         }
 
-        if(deepCallback)
+        if(!withYoutubeLink && deepCallback)
             deepCallback(result);
-        return result;
     };
 
     return sendRequest(leUrl, GET, callback);

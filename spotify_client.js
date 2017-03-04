@@ -17,15 +17,14 @@ var debug = function (msg) {
 };
 
 var sendRequest = function(path, method, callback) {
-    console.log("[REST] Sending " + method + " request to " + baseUrl + path + "...");
+    console.log("- [REST] Sending " + method + " request to " + baseUrl + path + "...");
     if(method === GET) {
         request(baseUrl + path, function (error, response, body) {
-            console.log("[REST] sending " + method + " request to " + baseUrl + path);
             if (!error && response.statusCode == 200) {
-                console.log("[REST] Successs sending " + method + " request to " + baseUrl + path);
+                console.log("- [REST] Successs sending " + method + " request to " + baseUrl + path);
                 callback(JSON.parse(body));
             } else {
-                console.log("[REST] Error sending " + method + " request to " + baseUrl + path + " -> \nStatus: "+response.statusCode + ": \nError: " + error + "\nBody: " + body);
+                console.log("- [REST] Error sending " + method + " request to " + baseUrl + path + " -> \nStatus: "+response.statusCode + ": \nError: " + error + "\nBody: " + body);
             }
         });
     }

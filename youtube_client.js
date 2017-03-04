@@ -10,16 +10,23 @@ const targetPrefix = "https://youtu.be/";
 var request = require('request');
 var querystring = require("querystring");
 
+var debugMode = false;
+
+var debug = function (msg) {
+    if(debugMode)
+        console.log(msg);
+};
+
 var sendRequest = function(path, method, callback) {
-    console.log("[REST] Sending " + method + " request to " + baseUrl + path + "...");
+    console.log("- [REST] Sending " + method + " request to " + baseUrl + path + "...");
     if(method === GET) {
         request(baseUrl + path, function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log("[REST] Success sending " + method + " request to " + baseUrl + path);
+                console.log("- [REST] Success sending " + method + " request to " + baseUrl + path);
                 callback(JSON.parse(body));
             } else {
                 var theResponse = response ? response.statusCode : null;
-                console.log("[REST] Error sending " + method + " request to " + baseUrl + path + " -> \nStatus: "+theResponse + ": \nError: " + error + "\nBody: " + body);
+                console.log("- [REST] Error sending " + method + " request to " + baseUrl + path + " -> \nStatus: "+theResponse + ": \nError: " + error + "\nBody: " + body);
             }
         });
     }
@@ -28,11 +35,14 @@ var sendRequest = function(path, method, callback) {
 
 
 /**
- * @param name Name of the video
+ * @param artist Artist of the track
+ * @param track The track's name
  * @param deepCallback (optional) function to carry out with the result of this method after the method
  * @return NULL. if you want to use the result, use it by providing a deepCallback
  */
-var getVideoLink =function (name, deepCallback) {
+var getVideoLink =function (artist, track, deepCallback) {
+
+    var name = artist + " " + track;
 
     console.log("[YOUTUBE] Setting up video search for " + name);
 
@@ -46,15 +56,12 @@ var getVideoLink =function (name, deepCallback) {
             return;
         }
 
-        var result = [];
+        var result = {artist:artist, name:track,url:targetPrefix+list[0].id.videoId};
 
-        for(var i= 0; i < list.length;i++) {
-            result.push(targetPrefix+list[i].id.videoId);
-        }
+        debug("[YOUTUBE] Found result " + result.artist +", " + result.name + ", " + result.url);
 
         if(deepCallback)
             deepCallback(result);
-        return result;
     };
 
     return sendRequest(leUrl, GET, callback);
