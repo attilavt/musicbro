@@ -18,8 +18,13 @@ app.get('/', function (req, res) {
   res.send('Hello world');
 });
 
-app.listen(5000, function () {
-  console.log('Listening on port 5000');
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 8080;
+
+
+app.listen(port, function () {
+  console.log('Listening on port' + port);
 });
 
 // respond to facebook's verification
