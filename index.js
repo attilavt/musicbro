@@ -293,6 +293,10 @@ function sendGenericMessage(recipientId) {
       id: recipientId
     },
     message: {
+      text: "test"
+    },
+
+    message: {
       attachment: {
         type: "template",
         payload: {
@@ -322,7 +326,7 @@ function sendGenericMessage(recipientId) {
             title: "ANNA BÜHLER (Indie Bro)",
             subtitle: "Netzfilter | Maymays | Podcasts | Moderatorin bei @puls_br",
             item_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",               
-            image_url: "https://www.pulshackdays.de/img/team/anna.jpg",
+            image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
             buttons: [{
               type: "postback",
               title: "Give me: Indie!",
