@@ -5,6 +5,27 @@
 <body>
 
 <script>
+var spotifyClient = require('./spotify_client');
+var lastfmClient = require('./lastfm_client');
+var brorequests = require('./brorequests');
+
+//spotifyClient.getArtistId("AFI");
+//spotifyClient.getArtistTopTracks("Attila von Thermann",undefined, 3);
+//spotifyClient.getSimilarArtists("AFI",undefined,3);
+//lastfmClient.getTagTopArtists("indie",3);
+
+var printTracks = function(tracks) {
+    console.log("Printing Tracks: ");
+  for(var i = 0; i < tracks.length;i++) {
+    var track = tracks[i];
+    console.log("Track: '" + track.name + "' by " + track.artist + " (" + track.url + ")");
+  }
+};
+
+
+
+
+
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '1167627813335776',
@@ -40,12 +61,30 @@ function myFacebookLogin() {
 		    "/me/music?fields",
 		    function (response) {
 		      if (response && !response.error) {
-		        
+		        var artistNameList = [];
 
 				for (var l = response.data.length, i = 0; i < l; i++) {
 				    var obj = response.data[i];
-				    console.log(obj.name);
+				    //console.log(obj.name);
+				    // append new value to the array
+					artistNameList.push(obj.name);
+
+
+
+
+				
+
+				
+
+
+
+
+
+
+
+
 				}
+				brorequests.getSuggestions(artistNameList,"cloud rap",3, printTracks);
 
 		      }
 		    }
