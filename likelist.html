@@ -37,10 +37,10 @@ function myFacebookLogin() {
     console.log(response.authResponse.accessToken);
       		/* make the API call */
 			FB.api(
-		    "/me/music",
+		    "/me/music?fields",
 		    function (response) {
 		      if (response && !response.error) {
-		        var testbody = JSON.parse(response[0].body);
+		        var testbody = JSON.parse(response);
 
 		        alert(testbody);
 		      }
