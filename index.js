@@ -183,7 +183,7 @@ function sendTextMessage(recipientId, messageText) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/music',
     qs: { access_token: PAGE_ACCESS_TOKEN },
-    method: 'POST',
+    method: 'POST'
 
   }, function (error, response, body) {
     if (!error) {
