@@ -33,6 +33,9 @@ var sendRequest = function(path, method, callback) {
  * @return NULL. if you want to use the result, use it by providing a deepCallback
  */
 var getTagTopArtists =function (tag, limit, deepCallback) {
+
+    console.log("[LASTFM] Setting up tag top artists search for " + tag);
+
     var query = querystring.stringify({method:"tag.getTopArtists", tag: tag, api_key: apiKey, format:"json", limit:limit});
     var leUrl =  "?"+query;
 
