@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var spotifyClient = require('./spotify_client');
 var lastfmClient = require('./lastfm_client');
+var youtubeClient = require('./youtube_client');
 var brorequests = require('./brorequests');
 
 //spotifyClient.getArtistId("AFI");
@@ -15,12 +16,24 @@ var brorequests = require('./brorequests');
 
 var printTracks = function(tracks) {
     console.log("Printing Tracks: ");
-  for(var i = 0; i < tracks.length;i++) {
-    var track = tracks[i];
-    console.log("Track: '" + track.name + "' by " + track.artist + " (" + track.url + ")");
-  }
+    for(var i = 0; i < tracks.length;i++) {
+        var track = tracks[i];
+        console.log("Track: '" + track.name + "' by " + track.artist + " (" + track.url + ")");
+    }
 };
+var printObjects = function(tracks) {
+    for(var i = 0; i < tracks.length;i++) {
+        var track = tracks[i];
+        console.log("Object: " + track);
+    }
+};
+
+/*
+
 brorequests.getSuggestions([],"cloud rap",3, printTracks);
+ lastfmClient.getArtistTopTracks("Kafkas Orient Bazaar", 3,true,printTracks);
+*/
+//youtubeClient.getVideoLink("Kafkas Orient Bazaar Hair Grip", printObjects);
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -29,6 +42,25 @@ app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
   res.send('Hello world');
+});
+
+app.get('/suggestions', function (req, res) {
+    var klString = req.headers["mb-known-likes"];
+    var genre = req.headers["mb-genre"];
+    console.log("[SUGG][INPUT] Known likes raw header:" + klString);
+    console.log("[SUGG][INPUT] Genre: " + genre);
+    if(!klString || ! genre) {
+        var error = "Error! Required Headers not set! mb-known-likes:"+ klString + "; genre:" + genre;
+        console.log("[SUGG][INPUT][ERROR]: " + error);
+        res.send(error);
+        return;
+    }
+    var knownLikes = klString.split(",,,");
+    console.log("[SUGG][INPUT] Known likes split: "+knownLikes);
+    var outputAsJson = function (list) {
+        res.send(JSON.stringify(list));
+    };
+    brorequests.getSuggestions(knownLikes,genre,3, outputAsJson);
 });
 
 app.get('/likes', function (req, res) {

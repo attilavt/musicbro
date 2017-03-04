@@ -13,6 +13,21 @@ var debug = function (msg) {
 
 /**
  *
+ * @param list The string list to search through
+ * @param string The string to search for
+ * @returns {boolean} whether given string is contained in given list
+ */
+var listContains = function (list, string) {
+    for(var i = 0; i < list.length;i++) {
+        if(list[i]===string) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ *
  * Return data: objects with {artist, name, url}
  *
  * @param knownLikes List with names of artists that we know the user likes
@@ -47,12 +62,15 @@ var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
         var j = 0;
         for(var i = 0; i < list.length;i++) {
             var artist = list[i];
-            if(!knownLikes.indexOf(artist) > -1) {
+            if(!listContains(knownLikes,artist)) {
+                debug("Artist " + artist + " not in list of known likes: " + knownLikes);
                 j++;
                 startArtist(artist);
                 if(j>=limit) {
                     break;
                 }
+            } else {
+                debug("Artist " + artist + " IS in list of known likes: " + knownLikes);
             }
         }
 
