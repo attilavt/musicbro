@@ -30,7 +30,18 @@
 <script>
 // Only works after `FB.init` is called
 function myFacebookLogin() {
-  FB.login(function(){}, {scope: 'publish_actions'});
+  FB.login(function(){}, {scope: 'user_likes'});
+
+  /* make the API call */
+	FB.api(
+    "/{user-id}/music",
+    function (response) {
+      if (response && !response.error) {
+        console("erfolg!");
+      }
+    }
+);
+
 }
 </script>
 <button onclick="myFacebookLogin()">Login with Facebook</button>
