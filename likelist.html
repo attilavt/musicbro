@@ -40,9 +40,13 @@ function myFacebookLogin() {
 		    "/me/music?fields",
 		    function (response) {
 		      if (response && !response.error) {
-		        var testbody = JSON.parse(response);
+		        
 
-		        alert(testbody);
+				for (var l = response.data.length, i = 0; i < l; i++) {
+				    var obj = response.data[i];
+				    console.log(obj.name);
+				}
+
 		      }
 		    }
 		);
