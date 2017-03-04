@@ -4,7 +4,7 @@
 
 var spotifyClient = require('./spotify_client');
 var lastfmClient = require('./lastfm_client');
-var debugMode = false;
+var debugMode = true;
 
 var debug = function (msg) {
     if(debugMode)
@@ -19,7 +19,7 @@ var debug = function (msg) {
  */
 var listContains = function (list, string) {
     for(var i = 0; i < list.length;i++) {
-        if(list[i]===string) {
+        if(list[i].toUpperCase()===string.toUpperCase()) {
             return true;
         }
     }
