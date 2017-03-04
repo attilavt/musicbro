@@ -306,6 +306,9 @@ function receivedPostback(event) {
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
   if(brorequests.listContains([payloadGetStarted, payloadUserDef, startGiveMe, payloadHelp, payloadRestart, bros], payload)) {
+      if(payload===payloadRestart || payload===payloadUserDef) {
+          sendTextMessage(senderID, "Hi! Deine Puls-Bros werden dir neue Musik empfehlen. Wer darf dir zuerst Vorschläge schicken?");
+      }
       sendGenericMessage(senderID);
   } else if(payload.startsWith(startGiveMe)) {
       var genre = payload.substring(startGiveMe.length,payload.length-endGiveMe.length);
