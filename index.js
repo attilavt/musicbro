@@ -128,6 +128,7 @@ app.post('/webhook/', function (req, res) {
   }
 });
 
+const bros = "bros";
 const idOfOurPage = 643263585872797;
 // wird aufgerufen von methode darüber
 function receivedMessage(event) {
@@ -155,7 +156,9 @@ function receivedMessage(event) {
                 // If we receive a text message, check to see if it matches a keyword
                 // and send back the example. Otherwise, just echo the text we received.
                 switch (messageText) {
-                  case 'generic':
+                    case payloadGetStarted:
+                    case bros:
+                    case 'generic':
                     sendGenericMessage(senderID);
                     break;
 
@@ -296,7 +299,10 @@ function testSendVideo(recipientId) {
 
 */
 
-
+/**
+ * SHOW THE BROS
+ * @param recipientId
+ */
 function sendGenericMessage(recipientId) {
   var messageData = {
     recipient: {
@@ -348,8 +354,50 @@ function sendGenericMessage(recipientId) {
   callSendAPI(messageData);
 }
 
+/**
+ * SHOW THE TRACKS
+ * @param recipientId
+ * @param genre for which genre
+ */
+function sendTrackRecommendations(recipientId, genre) {
+
+    console.log("Setting up track recommendations message to " + recipientId + " for " + genre);
+
+    var sendData = function(tracks) {
+        var messageData = {
+            recipient: {
+                id: recipientId
+            },
+
+            message: {
+                attachment: {
+                    type: "template",
+                    payload: {
+                        template_type: "generic",
+                        elements: []
+                    }
+                }
+            }
+        };
+
+        for(var i = 0; i < tracks.length; i++) {
+            var track = tracks[i];
+            var element = {title:track.artist,subtitle:track.name,item_url:track.url,image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png" };
+            messageData.message.attachment.payload.elements.push(element);
+        }
+
+        callSendAPI(messageData);
+    };
+
+    brorequests.getSuggestions([], genre, 3, sendData);
 
 
+}
+
+
+const payloadGetStarted = "Get started";
+const startGiveMe = "Give me: ";
+const endGiveMe = "!";
 
 function receivedPostback(event) {
   var senderID = event.sender.id;
@@ -363,9 +411,16 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d with payload '%s' " + 
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
-  // When a postback is called, we'll send a message back to the sender to 
-  // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+  if(payload === payloadGetStarted) {
+      sendGenericMessage(senderID);
+  } else if(payload.startsWith(startGiveMe)) {
+      var genre = payload.substring(startGiveMe.length,payload.length-endGiveMe.length);
+      sendTrackRecommendations(senderID, genre);
+  } else {
+      // When a postback is called, we'll send a message back to the sender to
+      // let them know it was successful
+      sendTextMessage(senderID, "Postback called");
+  }
 }
 
 
