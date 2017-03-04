@@ -301,7 +301,7 @@ function sendGenericMessage(recipientId) {
             title: "TOM BAUER (Hiphop Bro)",
             subtitle: "Techie @puls_br ● Kurator @dublabde ● Things @mom_crew ● AG Pappenheim",
             item_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",               
-            image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
+            image_url: "https://pbs.twimg.com/profile_images/680799426907107328/E33izQ7g_400x400.jpg",
             buttons: [{
               type: "postback",
               title: "Give me: HipHop!",
@@ -311,7 +311,7 @@ function sendGenericMessage(recipientId) {
             title: "JENS MILKOWSKI (Minimal Bro)",
             subtitle: "Ich bin hier, weil... ...ich gerne auf Facebook abhänge. Und sonst so ...Bass",
             item_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",               
-            image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
+            image_url: "https://www.pulshackdays.de/img/team/jens.jpg",
             buttons: [{
               type: "postback",
               title: "Give me: Minimal!",
@@ -322,7 +322,7 @@ function sendGenericMessage(recipientId) {
             title: "ANNA BÜHLER (Indie Bro)",
             subtitle: "Netzfilter | Maymays | Podcasts | Moderatorin bei @puls_br",
             item_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",               
-            image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
+            image_url: "https://www.pulshackdays.de/img/team/anna.jpg",
             buttons: [{
               type: "postback",
               title: "Give me: Indie!",
