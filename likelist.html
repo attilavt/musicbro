@@ -32,15 +32,22 @@
 function myFacebookLogin() {
   FB.login(function(){}, {scope: 'user_likes'});
 
-  /* make the API call */
-	FB.api(
-    "/me/music",
-    function (response) {
-      if (response && !response.error) {
-        alert(response);
-      }
-    }
-);
+  FB.getLoginStatus(function(response) {
+  if (response.status === 'connected') {
+    console.log(response.authResponse.accessToken);
+      		/* make the API call */
+			FB.api(
+		    "/me/music",
+		    function (response) {
+		      if (response && !response.error) {
+		        alert(response);
+		      }
+		    }
+		);
+  }
+});
+
+
 
 }
 </script>
