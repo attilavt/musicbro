@@ -9,10 +9,18 @@ const GET = "GET";
 var request = require('request');
 var querystring = require("querystring");
 
+var debugMode = false;
+
+var debug = function (msg) {
+    if(debugMode)
+        console.log(msg);
+};
+
 var sendRequest = function(path, method, callback) {
     console.log("[REST] Sending " + method + " request to " + baseUrl + path + "...");
     if(method === GET) {
         request(baseUrl + path, function (error, response, body) {
+            console.log("[REST] sending " + method + " request to " + baseUrl + path);
             if (!error && response.statusCode == 200) {
                 console.log("[REST] Successs sending " + method + " request to " + baseUrl + path);
                 callback(JSON.parse(body));
@@ -30,6 +38,9 @@ var sendRequest = function(path, method, callback) {
  * @return NULL. if you want to use the result, use it by providing a deepCallback
  */
 var getArtistId =function (name, deepCallback) {
+
+    console.log("[SPOTIFY] Setting up artist ID search for " + name);
+
     var query = querystring.stringify({q:name,type:"artist",market:market,limit:1});
     var leUrl =  "search?" + query;
 
@@ -41,7 +52,7 @@ var getArtistId =function (name, deepCallback) {
 
         var result = chunk.artists.items[0].id;
 
-        console.log("Found spotify id ", result, "for artist with name "+ name);
+        debug("Found spotify id ", result, "for artist with name "+ name);
         if(deepCallback)
             deepCallback(result);
         return result;
@@ -58,8 +69,8 @@ var getArtistId =function (name, deepCallback) {
  * @return NULL. if you want to use the result, use it by providing a deepCallback
  */
 var getSimilarArtists = function (name, artistSpotifyId, limit, deepCallback) {
-
     var doIt = function (spotifyId) {
+        console.log("[SPOTIFY] Setting up similar artists search for " + name);
         var leUrl =  "artists/" + spotifyId + "/related-artists?country=" + market;
 
         var callback = function(chunk) {
@@ -75,7 +86,7 @@ var getSimilarArtists = function (name, artistSpotifyId, limit, deepCallback) {
                 result.push(artist.name);
             }
 
-            console.log("Found spotify similar artists ", result, "for artist with name "+ name);
+            debug("Found spotify similar artists ", result, "for artist with name "+ name);
             if(deepCallback)
                 deepCallback(result);
             return result;
@@ -103,6 +114,7 @@ var getSimilarArtists = function (name, artistSpotifyId, limit, deepCallback) {
 var getArtistTopTracks = function (name, artistSpotifyId, limit, deepCallback) {
 
     var doIt = function (spotifyId) {
+        console.log("[SPOTIFY] Setting up artist top tracks search for " + name);
         var leUrl =  "artists/" + spotifyId + "/top-tracks?country=" + market;
 
         var callback = function(chunk) {
@@ -115,10 +127,16 @@ var getArtistTopTracks = function (name, artistSpotifyId, limit, deepCallback) {
 
             for(var i = 0; i < chunk.tracks.length && i < limit; i++) {
                 var track = chunk.tracks[i];
-                result.push({name:track.name, url:track.external_urls.spotify});
+                var artistName = "";
+                var sep = ", ";
+                for(var j = 0; j < track.artists.length; j++) {
+                    artistName+=track.artists[j].name +sep;
+                }
+                artistName = artistName.substring(0, artistName.length-sep.length);
+                result.push({artist:artistName,name:track.name, url:track.external_urls.spotify});
             }
 
-            console.log("Found spotify top tracks ", result, "for artist with name "+ name);
+            debug("Found spotify top tracks ", result, "for artist with name "+ name);
             if(deepCallback)
                 deepCallback(result);
             return result;

@@ -5,9 +5,22 @@ var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
 var spotifyClient = require('./spotify_client');
+var lastfmClient = require('./lastfm_client');
+var brorequests = require('./brorequests');
 
-//var spotifyId = spotifyClient.getArtistId("AFI");
-//spotifyClient.getSimilarArtists("AFI","19I4tYiChJoxEO5EuviXpz", 3);
+//spotifyClient.getArtistId("AFI");
+//spotifyClient.getArtistTopTracks("Attila von Thermann",undefined, 3);
+//spotifyClient.getSimilarArtists("AFI",undefined,3);
+//lastfmClient.getTagTopArtists("indie",3);
+
+var printTracks = function(tracks) {
+    console.log("Printing Tracks: ");
+  for(var i = 0; i < tracks.length;i++) {
+    var track = tracks[i];
+    console.log("Track: '" + track.name + "' by " + track.artist + " (" + track.url + ")");
+  }
+};
+brorequests.getSuggestions([],"cloud rap",3, printTracks);
 
 app.use(bodyParser.urlencoded({
   extended: true
