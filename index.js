@@ -332,7 +332,7 @@ function sendGenericMessage(recipientId) {
             buttons: [{
               type: "postback",
               title: "Give me: Minimal!",
-              payload: "Payload for second bubble"
+              payload: "Give me: Minimal!"
             }]
           }, {
 
@@ -343,7 +343,7 @@ function sendGenericMessage(recipientId) {
             buttons: [{
               type: "postback",
               title: "Give me: Indie!",
-              payload: "Payload for second bubble"
+              payload: "Give me: Indie!"
             }]
           }]
         }
