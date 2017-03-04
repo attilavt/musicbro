@@ -246,6 +246,9 @@ function sendTrackRecommendations(recipientId, genre) {
 
 
 const payloadGetStarted = "Get started";
+const payloadUserDef = "USER_DEFINED_PAYLOAD";
+const payloadHelp = "HILFE";
+const payloadRestart = "NEUSTARTEN";
 const startGiveMe = "Give me: ";
 const endGiveMe = "!";
 
@@ -261,7 +264,7 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d with payload '%s' " + 
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
-  if(payload === payloadGetStarted) {
+  if(brorequests.listContains([payloadGetStarted, payloadUserDef, startGiveMe, payloadHelp, payloadRestart], payload)) {
       sendGenericMessage(senderID);
   } else if(payload.startsWith(startGiveMe)) {
       var genre = payload.substring(startGiveMe.length,payload.length-endGiveMe.length);
