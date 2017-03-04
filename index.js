@@ -205,6 +205,42 @@ function sendGenericMessage(recipientId) {
 }
 
 /**
+ * SHOW THE BROS
+ * @param recipientId
+ */
+function sendAfterTracksMessage(recipientId, genre) {
+    var messageData = {
+        recipient: {
+            id: recipientId
+        },
+
+        message: {
+            attachment: {
+                type: "template",
+                payload: {
+                    template_type: "generic",
+                    elements: [{
+                        title: "Was jetzt?",
+                        subtitle: "",
+                        buttons: [{
+                            type: "postback",
+                            title: "Mehr " + genre + " Vorschläge!",
+                            payload: "Give me: "+genre+"!"
+                        },{
+                            type: "postback",
+                            title: "Zu den Bros!",
+                            payload: "bros"
+                        }]
+                    }]
+                }
+            }
+        }
+    };
+
+    callSendAPI(messageData);
+}
+
+/**
  * SHOW THE TRACKS
  * @param recipientId
  * @param genre for which genre
@@ -212,6 +248,8 @@ function sendGenericMessage(recipientId) {
 function sendTrackRecommendations(recipientId, genre) {
 
     console.log("Setting up track recommendations message to " + recipientId + " for " + genre);
+
+    sendTextMessage(recipientId, "Hier sind deine Vorschläge: ");
 
     var sendData = function(tracks) {
         var messageData = {
@@ -237,13 +275,16 @@ function sendTrackRecommendations(recipientId, genre) {
         }
 
         callSendAPI(messageData);
+
+        var send = function() {
+            sendAfterTracksMessage(recipientId, genre);
+        };
+
+        setTimeout(send, 2000);
     };
 
     brorequests.getSuggestions([], genre, 3, sendData);
-
-
 }
-
 
 const payloadGetStarted = "Get started";
 const payloadUserDef = "USER_DEFINED_PAYLOAD";
@@ -264,7 +305,7 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d with payload '%s' " + 
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
-  if(brorequests.listContains([payloadGetStarted, payloadUserDef, startGiveMe, payloadHelp, payloadRestart], payload)) {
+  if(brorequests.listContains([payloadGetStarted, payloadUserDef, startGiveMe, payloadHelp, payloadRestart, bros], payload)) {
       sendGenericMessage(senderID);
   } else if(payload.startsWith(startGiveMe)) {
       var genre = payload.substring(startGiveMe.length,payload.length-endGiveMe.length);
@@ -272,7 +313,7 @@ function receivedPostback(event) {
   } else {
       // When a postback is called, we'll send a message back to the sender to
       // let them know it was successful
-      sendTextMessage(senderID, "Postback called");
+      sendTextMessage(senderID, payload + "??");
   }
 }
 
