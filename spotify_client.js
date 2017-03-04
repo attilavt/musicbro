@@ -16,12 +16,16 @@ var sendRequest = function(path, method, callback) {
                 console.log("response.statusCode:" +response.statusCode);
                 callback(JSON.parse(body));
             }
-            return;
         });
     }
 
 };
 
+/**
+ * @param name Name of the artist
+ * @param deepCallback (optional) function to carry out with the result of this method after the method
+ * @return NULL. if you want to use the result, use it by providing a deepCallback
+ */
 var getArtistId =function (name, deepCallback) {
     var leUrl =  "search?q=" + name + "&type=artist&market=" + market + "&limit=1";
 
@@ -42,33 +46,93 @@ var getArtistId =function (name, deepCallback) {
     return sendRequest(leUrl, GET, callback);
 };
 
+/**
+ * @param name Name of the artist
+ * @param artistSpotifyId (optional) spotify ID of the artist. if not given, getArtistId method is used before sending the request for this method
+ * @param limit amount of similar artists wanted
+ * @param deepCallback (optional) function to carry out with the result of this method after the method
+ * @return NULL. if you want to use the result, use it by providing a deepCallback
+ */
 var getSimilarArtists = function (name, artistSpotifyId, limit, deepCallback) {
 
-    var leUrl =  "artists/" + artistSpotifyId + "/related-artists?country=" + market;
+    var doIt = function (spotifyId) {
+        var leUrl =  "artists/" + spotifyId + "/related-artists?country=" + market;
 
-    var callback = function(chunk) {
-        if (chunk.artists.length === 0 ){
-            console.log("No spotify similar artist found for artist with name"+ name);
-            return;
-        }
+        var callback = function(chunk) {
+            if (chunk.artists.length === 0 ){
+                console.log("No spotify similar artist found for artist with name"+ name);
+                return;
+            }
 
-        var result = [];
+            var result = [];
 
-        for(var i = 0; i < chunk.artists.length && i < limit; i++) {
-            var artist = chunk.artists[i];
-            result.push(artist.name);
-        }
+            for(var i = 0; i < chunk.artists.length && i < limit; i++) {
+                var artist = chunk.artists[i];
+                result.push(artist.name);
+            }
 
-        console.log("Found spotify similar artists ", result, "for artist with name "+ name);
-        if(deepCallback)
-            deepCallback(result);
-        return result;
+            console.log("Found spotify similar artists ", result, "for artist with name "+ name);
+            if(deepCallback)
+                deepCallback(result);
+            return result;
+        };
+
+        return sendRequest(leUrl, GET, callback);
     };
 
-    return sendRequest(leUrl, GET, callback);
+    if(!artistSpotifyId) {
+        getArtistId(name, doIt);
+    } else {
+        doIt(artistSpotifyId);
+    }
+
+};
+
+/**
+ * Result is list of object with (name, url)
+ * @param name Name of the artist
+ * @param artistSpotifyId (optional) spotify ID of the artist. if not given, getArtistId method is used before sending the request for this method
+ * @param limit amount of top tracks wanted
+ * @param deepCallback (optional) function to carry out with the result of this method after the method
+ * @return NULL. if you want to use the result, use it by providing a deepCallback
+ */
+var getArtistTopTracks = function (name, artistSpotifyId, limit, deepCallback) {
+
+    var doIt = function (spotifyId) {
+        var leUrl =  "artists/" + spotifyId + "/top-tracks?country=" + market;
+
+        var callback = function(chunk) {
+            if (chunk.tracks.length === 0 ){
+                console.log("No spotify top tracks found for artist with name"+ name);
+                return;
+            }
+
+            var result = [];
+
+            for(var i = 0; i < chunk.tracks.length && i < limit; i++) {
+                var track = chunk.tracks[i];
+                result.push({name:track.name, url:track.external_urls.spotify});
+            }
+
+            console.log("Found spotify top tracks ", result, "for artist with name "+ name);
+            if(deepCallback)
+                deepCallback(result);
+            return result;
+        };
+
+        return sendRequest(leUrl, GET, callback);
+    };
+
+    if(!artistSpotifyId) {
+        getArtistId(name, doIt);
+    } else {
+        doIt(artistSpotifyId);
+    }
+
 };
 
 module.exports = {
     getArtistId: getArtistId,
-    getSimilarArtists: getSimilarArtists
+    getSimilarArtists: getSimilarArtists,
+    getArtistTopTracks: getArtistTopTracks
 };

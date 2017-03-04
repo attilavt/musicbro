@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var spotifyClient = require('./spotify_client');
 
-var spotifyId = spotifyClient.getArtistId("AFI");
-spotifyClient.getSimilarArtists("AFI","19I4tYiChJoxEO5EuviXpz", 3);
+//var spotifyId = spotifyClient.getArtistId("AFI");
+//spotifyClient.getSimilarArtists("AFI","19I4tYiChJoxEO5EuviXpz", 3);
 
 app.use(bodyParser.urlencoded({
   extended: true
