@@ -76,7 +76,7 @@ app.listen(port, function () {
   console.log('Listening on port' + port);
 });
 
-// respond to facebook's verification
+// respond to facebook's verification; einmaliges aufsetzen des webhooks
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === VERIFY_TOKEN) {
@@ -88,7 +88,7 @@ app.get('/webhook', function(req, res) {
   }  
 });
 
-// respond to post calls from facebook
+// respond to post calls from facebook; jedes mal wenn user etwas schickt
 app.post('/webhook/', function (req, res) {
   var data = req.body;
 
@@ -103,9 +103,11 @@ app.post('/webhook/', function (req, res) {
       // Iterate over each messaging event
       entry.messaging.forEach(function(event) {
         if (event.message) {
+            console.log("EVENT MESSAGE");
           receivedMessage(event);
         } 
          else if (event.postback) {
+            console.log("EVENT POSTBACK");
           receivedPostback(event);  
         }
 
@@ -125,6 +127,7 @@ app.post('/webhook/', function (req, res) {
   }
 });
 
+// wird aufgerufen von methode darüber
 function receivedMessage(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
@@ -209,7 +212,7 @@ function sendTextMessage(recipientId, messageText) {
       id: recipientId
     },
     message: {
-      text: messageTest
+      text: messageText
     }
   };
 
