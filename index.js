@@ -164,7 +164,7 @@ function receivedMessage(event) {
               }
 }
 
-/*
+
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
     recipient: {
@@ -176,7 +176,7 @@ function sendTextMessage(recipientId, messageText) {
   };
 
   callSendAPI(messageData);
-}*/
+}
 
 
 function sendTextMessage(recipientId, messageText) {
