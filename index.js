@@ -4,9 +4,9 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
-var spotifyClient = require('./spotify_client');
-var lastfmClient = require('./lastfm_client');
-var youtubeClient = require('./youtube_client');
+//var spotifyClient = require('./spotify_client');
+//var lastfmClient = require('./lastfm_client');
+//var youtubeClient = require('./youtube_client');
 var brorequests = require('./brorequests');
 
 //spotifyClient.getArtistId("AFI");
@@ -14,6 +14,7 @@ var brorequests = require('./brorequests');
 //spotifyClient.getSimilarArtists("AFI",undefined,3);
 //lastfmClient.getTagTopArtists("indie",3);
 
+/*
 var printTracks = function(tracks) {
     console.log("Printing Tracks: ");
     for(var i = 0; i < tracks.length;i++) {
@@ -28,7 +29,7 @@ var printObjects = function(tracks) {
     }
 };
 
-/*
+
 
 brorequests.getSuggestions([],"cloud rap",3, printTracks);
  lastfmClient.getArtistTopTracks("Kafkas Orient Bazaar", 3,true,printTracks);
@@ -295,9 +296,6 @@ function sendGenericMessage(recipientId) {
     recipient: {
       id: recipientId
     },
-    message: {
-      text: "test"
-    },
 
     message: {
       attachment: {
@@ -312,8 +310,8 @@ function sendGenericMessage(recipientId) {
             buttons: [{
               type: "postback",
               title: "Give me: HipHop!",
-              payload: "Give me: HipHop!",
-            }],
+              payload: "Give me: HipHop!"
+            }]
           }, {
             title: "JENS MILKOWSKI (Minimal Bro)",
             subtitle: "Ich bin hier, weil... ...ich gerne auf Facebook abhänge. Und sonst so ...Bass",
@@ -322,7 +320,7 @@ function sendGenericMessage(recipientId) {
             buttons: [{
               type: "postback",
               title: "Give me: Minimal!",
-              payload: "Payload for second bubble",
+              payload: "Payload for second bubble"
             }]
           }, {
 
@@ -333,7 +331,7 @@ function sendGenericMessage(recipientId) {
             buttons: [{
               type: "postback",
               title: "Give me: Indie!",
-              payload: "Payload for second bubble",
+              payload: "Payload for second bubble"
             }]
           }]
         }
@@ -385,7 +383,7 @@ function callSendAPI(messageData) {
         messageId, recipientId);
     } else {
       console.error("Unable to send message.");
-      console.error(response);
+      //console.error(response);
       console.error(error);
     }
   });  
