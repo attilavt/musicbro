@@ -128,6 +128,7 @@ app.post('/webhook/', function (req, res) {
   }
 });
 
+const idOfOurPage = 643263585872797;
 // wird aufgerufen von methode darüber
 function receivedMessage(event) {
   var senderID = event.sender.id;
@@ -137,6 +138,11 @@ function receivedMessage(event) {
 
   console.log("Received message for user %d and page %d at %d with message:", 
               senderID, recipientID, timeOfMessage);
+
+  if(senderID == idOfOurPage) {
+      console.log("Detected outgoing message from our page, not handling it.");
+      return;
+  }
               console.log(JSON.stringify(message));
 
               var messageId = message.mid;
