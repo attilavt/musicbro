@@ -232,7 +232,7 @@ function sendTrackRecommendations(recipientId, genre) {
 
         for(var i = 0; i < tracks.length; i++) {
             var track = tracks[i];
-            var element = {title:track.artist,subtitle:track.name,item_url:track.url,image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png" };
+            var element = {title:track.artist,subtitle:track.name,item_url:track.url,image_url: track.thumbnail };
             messageData.message.attachment.payload.elements.push(element);
         }
 

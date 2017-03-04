@@ -56,7 +56,7 @@ var getVideoLink =function (artist, track, deepCallback) {
             return;
         }
 
-        var result = {artist:artist, name:track,url:targetPrefix+list[0].id.videoId};
+        var result = {artist:artist, name:track,url:targetPrefix+list[0].id.videoId, thumbnail: list[0].snippet.thumbnails.medium.url};
 
         debug("[YOUTUBE] Found result " + result.artist +", " + result.name + ", " + result.url);
 
