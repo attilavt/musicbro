@@ -149,9 +149,9 @@ function receivedMessage(event) {
                     sendGenericMessage(senderID);
                     break;
 
-                    case 'video':
+                    /*case 'video':
                     testSendVideo(senderID);
-                    break;
+                    break;*/
 
                     
 
@@ -163,6 +163,8 @@ function receivedMessage(event) {
                 sendTextMessage(senderID, "Message with attachment received");
               }
 }
+
+/*
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
     recipient: {
@@ -174,13 +176,70 @@ function sendTextMessage(recipientId, messageText) {
   };
 
   callSendAPI(messageData);
+}*/
+
+
+function sendTextMessage(recipientId, messageText) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: "das ist ein test"
+    }
+  };
+
+  callSendAPI(messageData);
 }
 
+/*
+
+function testLikeMusic(messageData) {
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: PAGE_ACCESS_TOKEN },
+    method: 'POST',
+    json: messageData
+
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      console.log("Successfully sent generic message with id %s to recipient %s", 
+        messageId, recipientId);
+    } else {
+      console.error("Unable to send message.");
+      console.error(response);
+      console.error(error);
+    }
+  });  
+}*/
 
 
+          /* make the API call 
+      FB.api(
+        "/me/music?fields",
+        function (response) {
+          if (response && !response.error) {
+            var artistNameList = [];
 
+        for (var l = response.data.length, i = 0; i < l; i++) {
+            var obj = response.data[i];
+            //console.log(obj.name);
+            // append new value to the array
+          artistNameList.push(obj.name);
 
+        }
+        brorequests.getSuggestions(artistNameList,"cloud rap",3, printTracks);
 
+          }
+        }
+    );
+    */
+
+/*
+YOUTUBE LINKS NOT WORKING
 function testSendVideo(recipientId) {
   var messageData = {
     recipient: {
@@ -198,6 +257,8 @@ function testSendVideo(recipientId) {
 
   callSendAPI(messageData);
 }
+
+*/
 
 
 function sendGenericMessage(recipientId) {
@@ -296,26 +357,6 @@ function callSendAPI(messageData) {
 
 
 
-function testLikeMusic(messageData) {
-  request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
-    method: 'POST',
-    json: messageData
 
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      console.log("Successfully sent generic message with id %s to recipient %s", 
-        messageId, recipientId);
-    } else {
-      console.error("Unable to send message.");
-      console.error(response);
-      console.error(error);
-    }
-  });  
-}
 
 
