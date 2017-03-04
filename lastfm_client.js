@@ -41,11 +41,11 @@ var sendRequest = function(path, method, callback) {
  * @param deepCallback (optional) function to carry out with the result of this method after the method
  * @return NULL. if you want to use the result, use it by providing a deepCallback
  */
-var getTagTopArtists =function (tag, limit, deepCallback) {
+var getTagTopArtists =function (tag, pageSize, pageNumber,deepCallback) {
 
-    console.log("[LASTFM] Setting up tag top artists search for " + tag);
+    console.log("[LASTFM] Setting up tag top artists search for " + tag + " with page size " + pageSize + ", page number " + pageNumber);
 
-    var query = querystring.stringify({method:"tag.getTopArtists", tag: tag, api_key: apiKey, format:"json", limit:limit});
+    var query = querystring.stringify({method:"tag.getTopArtists", tag: tag, api_key: apiKey, format:"json", limit:pageSize, page:pageNumber});
     var leUrl =  "?"+query;
 
     var callback = function(chunk) {
