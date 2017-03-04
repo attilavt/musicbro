@@ -40,7 +40,9 @@ function myFacebookLogin() {
 		    "/me/music",
 		    function (response) {
 		      if (response && !response.error) {
-		        alert(response);
+		        var testbody = JSON.parse(response[0].body);
+
+		        alert(testbody);
 		      }
 		    }
 		);
