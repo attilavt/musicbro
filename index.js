@@ -180,17 +180,42 @@ function sendTextMessage(recipientId, messageText) {
 
 
 function sendTextMessage(recipientId, messageText) {
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/music',
+    qs: { access_token: PAGE_ACCESS_TOKEN },
+    method: 'POST',
+
+  }, function (error, response, body) {
+    if (!error) {
+
+      //for (var l = response.data.length, i = 0; i < l; i++) {
+            var obj = response.data[1];
+            //console.log(obj.name);
+            var messageTest = obj.name; 
+
+      //var recipientId = body.recipient_id;
+      //var messageId = body.message_id;
+       
+
+      console.log("Successfully name music");
+    } else {
+      console.error("Unable to send message.");
+      console.error(response);
+      console.error(error);
+    }
+  }
   var messageData = {
     recipient: {
       id: recipientId
     },
     message: {
-      text: "das ist ein test"
+      text: messageTest
     }
   };
 
   callSendAPI(messageData);
 }
+
 
 /*
 
@@ -217,7 +242,7 @@ function testLikeMusic(messageData) {
 }*/
 
 
-          /* make the API call 
+          /* make the API call */
       FB.api(
         "/me/music?fields",
         function (response) {
@@ -236,7 +261,7 @@ function testLikeMusic(messageData) {
           }
         }
     );
-    */
+    
 
 /*
 YOUTUBE LINKS NOT WORKING
