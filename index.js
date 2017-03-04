@@ -297,31 +297,34 @@ function sendGenericMessage(recipientId) {
         payload: {
           template_type: "generic",
           elements: [{
-            title: "rift",
-            subtitle: "Next-generation virtual reality",
-            item_url: "https://www.oculus.com/en-us/rift/",               
+            title: "TOM BAUER (Hiphop Bro)",
+            subtitle: "Techie @puls_br ● Kurator @dublabde ● Things @mom_crew ● AG Pappenheim",
+            item_url: " ",               
             image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
             buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "Open Web URL"
-            }, {
               type: "postback",
-              title: "Call Postback",
-              payload: "Payload for first bubble",
+              title: "Give me: HipHop!",
+              payload: "Give me: HipHop!",
             }],
           }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",               
+            title: "JENS MILKOWSKI (Minimal Bro)",
+            subtitle: "Ich bin hier, weil... ...ich gerne auf Facebook abhänge. Und sonst so ...Bass",
+            item_url: " ",               
             image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
             buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/touch/",
-              title: "Open Web URL"
-            }, {
               type: "postback",
-              title: "Call Postback",
+              title: "Give me: Minimal!",
+              payload: "Payload for second bubble",
+            }]
+          }, {
+
+            title: "ANNA BÜHLER (Indie Bro)",
+            subtitle: "Netzfilter | Maymays | Podcasts | Moderatorin bei @puls_br",
+            item_url: " ",               
+            image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
+            buttons: [{
+              type: "postback",
+              title: "Give me: Indie!",
               payload: "Payload for second bubble",
             }]
           }]
