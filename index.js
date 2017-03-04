@@ -178,7 +178,7 @@ function sendTextMessage(recipientId, messageText) {
   callSendAPI(messageData);
 }
 
-
+/*
 function sendTextMessage(recipientId, messageText) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/music',
@@ -215,6 +215,7 @@ function sendTextMessage(recipientId, messageText) {
 
   callSendAPI(messageData);
 }
+*/
 
 
 /*
