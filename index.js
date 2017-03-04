@@ -242,7 +242,7 @@ function testLikeMusic(messageData) {
 }*/
 
 
-          /* make the API call */
+          /* make the API call 
       FB.api(
         "/me/music?fields",
         function (response) {
@@ -261,7 +261,7 @@ function testLikeMusic(messageData) {
           }
         }
     );
-    
+    */
 
 /*
 YOUTUBE LINKS NOT WORKING
