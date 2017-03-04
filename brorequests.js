@@ -31,9 +31,9 @@ var listContains = function (list, string) {
  *
  * @param knownLikes List with names of artists that we know the user likes
  * @param genre the genre for which the suggestions should be
- * @param limit how many suggestions
+ * @param amount how many suggestions
  */
-var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
+var getSuggestions = function(knownLikes, genre, amount, deepCallback) {
 
     // step 2: enrich artists with top track
     var getTracksForArtists = function (list) {
@@ -53,7 +53,10 @@ var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
             if(artistsWithEnrichmentStarted==artistsWithEnrichmentFinished) {
                 debug("FINISHED TRACKS TOTALLY " + artistsWithEnrichmentFinished + "/" +artistsWithEnrichmentStarted);
                 if(deepCallback) {
+                    debug("BR DELIVERING " + artistsWithEnrichmentFinished + "/" +artistsWithEnrichmentStarted);
                     deepCallback(result);
+                } else {
+                    debug("BR NOT DELIVERING " + artistsWithEnrichmentFinished + "/" +artistsWithEnrichmentStarted);
                 }
 
             }
@@ -70,7 +73,7 @@ var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
                 debug("Artist " + artist + " not in list of known likes: " + knownLikes);
                 j++;
                 getTracksForArtist(artist);
-                if(j>=limit) {
+                if(j>=amount) {
                     break;
                 }
             } else {
@@ -80,9 +83,15 @@ var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
 
     };
 
-    // step 1: get top artists for genre, filter out known likes
-    var factor = 10;
-    lastfmClient.getTagTopArtists(genre, limit*factor, getTracksForArtists);
+    // step 1: get top artists for genre, filter out known likes; query more artists than we need, since some might be
+    // already known to the user
+    var factorMin = 2.0;
+    var factorMax = 4.0;
+    var minPageNumber = 12;
+    var maxPageNumber = 24;
+    var pageSize = Math.round(amount * factorMin + (amount *(factorMax-factorMin)*Math.random()));
+    var pageNumber = minPageNumber+Math.round(Math.random() *maxPageNumber-minPageNumber);
+    lastfmClient.getTagTopArtists(genre, pageSize, pageNumber, getTracksForArtists);
 };
 
 module.exports = {
