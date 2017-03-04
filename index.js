@@ -98,6 +98,7 @@ app.post('/webhook/', function (req, res) {
 });
 
 const bros = "bros";
+const restart = "restart bot";
 const idOfOurPage = 643263585872797;
 // wird aufgerufen von methode darüber
 function receivedMessage(event) {
@@ -124,15 +125,11 @@ function receivedMessage(event) {
 
                 // If we receive a text message, check to see if it matches a keyword
                 // and send back the example. Otherwise, just echo the text we received.
-                switch (messageText) {
-                    case payloadGetStarted:
-                    case bros:
-                    case 'generic':
-                    sendGenericMessage(senderID);
-                    break;
-                  default:
-                    sendTextMessage(senderID, messageText);
-                }
+                  if(brorequests.listContains([bros,payloadGetStarted,"generic",restart], messageText)) {
+                      sendGenericMessage(senderID);
+                  } else {
+                      sendTextMessage(senderID, messageText + "?");
+                  }
               } else if (messageAttachments) {
                 sendTextMessage(senderID, "Message with attachment received");
               }

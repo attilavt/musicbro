@@ -95,5 +95,6 @@ var getSuggestions = function(knownLikes, genre, amount, deepCallback) {
 };
 
 module.exports = {
-    getSuggestions: getSuggestions
+    getSuggestions: getSuggestions,
+    listContains:listContains
 };
