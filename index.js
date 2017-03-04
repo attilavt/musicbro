@@ -1,4 +1,4 @@
-var VERIFY_TOKEN = '<YOUR_VERIFICATION_TOKEN>';
+var VERIFY_TOKEN = 'test5050';
 var PAGE_ACCESS_TOKEN = '<YOUR_PAGE_ACCESS_TOKEN>';
 var express = require('express');
 var app = express();
