@@ -16,7 +16,6 @@ var sendRequest = function(path, method, callback) {
                 console.log("response.statusCode:" +response.statusCode);
                 callback(JSON.parse(body));
             }
-            return;
         });
     }
 
@@ -89,7 +88,51 @@ var getSimilarArtists = function (name, artistSpotifyId, limit, deepCallback) {
 
 };
 
+/**
+ * Result is list of object with (name, url)
+ * @param name Name of the artist
+ * @param artistSpotifyId (optional) spotify ID of the artist. if not given, getArtistId method is used before sending the request for this method
+ * @param limit amount of top tracks wanted
+ * @param deepCallback (optional) function to carry out with the result of this method after the method
+ * @return NULL. if you want to use the result, use it by providing a deepCallback
+ */
+var getArtistTopTracks = function (name, artistSpotifyId, limit, deepCallback) {
+
+    var doIt = function (spotifyId) {
+        var leUrl =  "artists/" + spotifyId + "/top-tracks?country=" + market;
+
+        var callback = function(chunk) {
+            if (chunk.tracks.length === 0 ){
+                console.log("No spotify top tracks found for artist with name"+ name);
+                return;
+            }
+
+            var result = [];
+
+            for(var i = 0; i < chunk.tracks.length && i < limit; i++) {
+                var track = chunk.tracks[i];
+                result.push({name:track.name, url:track.external_urls.spotify});
+            }
+
+            console.log("Found spotify top tracks ", result, "for artist with name "+ name);
+            if(deepCallback)
+                deepCallback(result);
+            return result;
+        };
+
+        return sendRequest(leUrl, GET, callback);
+    };
+
+    if(!artistSpotifyId) {
+        getArtistId(name, doIt);
+    } else {
+        doIt(artistSpotifyId);
+    }
+
+};
+
 module.exports = {
     getArtistId: getArtistId,
-    getSimilarArtists: getSimilarArtists
+    getSimilarArtists: getSimilarArtists,
+    getArtistTopTracks: getArtistTopTracks
 };
