@@ -167,7 +167,7 @@ function receivedMessage(event) {
               }
 }
 
-/*
+
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
     recipient: {
@@ -179,9 +179,9 @@ function sendTextMessage(recipientId, messageText) {
   };
 
   callSendAPI(messageData);
-}*/
+}
 
-
+/*
 function sendTextMessage(recipientId, messageText) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/music',
@@ -218,6 +218,7 @@ function sendTextMessage(recipientId, messageText) {
 
   callSendAPI(messageData);
 }
+*/
 
 
 /*
@@ -295,36 +296,43 @@ function sendGenericMessage(recipientId) {
       id: recipientId
     },
     message: {
+      text: "test"
+    },
+
+    message: {
       attachment: {
         type: "template",
         payload: {
           template_type: "generic",
           elements: [{
-            title: "rift",
-            subtitle: "Next-generation virtual reality",
-            item_url: "https://www.oculus.com/en-us/rift/",               
-            image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
+            title: "TOM BAUER (Hiphop Bro)",
+            subtitle: "Techie @puls_br ● Kurator @dublabde ● Things @mom_crew ● AG Pappenheim",
+            item_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",               
+            image_url: "https://pbs.twimg.com/profile_images/680799426907107328/E33izQ7g_400x400.jpg",
             buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/rift/",
-              title: "Open Web URL"
-            }, {
               type: "postback",
-              title: "Call Postback",
-              payload: "Payload for first bubble",
+              title: "Give me: HipHop!",
+              payload: "Give me: HipHop!",
             }],
           }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",               
+            title: "JENS MILKOWSKI (Minimal Bro)",
+            subtitle: "Ich bin hier, weil... ...ich gerne auf Facebook abhänge. Und sonst so ...Bass",
+            item_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",               
+            image_url: "https://www.pulshackdays.de/img/team/jens.jpg",
+            buttons: [{
+              type: "postback",
+              title: "Give me: Minimal!",
+              payload: "Payload for second bubble",
+            }]
+          }, {
+
+            title: "ANNA BÜHLER (Indie Bro)",
+            subtitle: "Netzfilter | Maymays | Podcasts | Moderatorin bei @puls_br",
+            item_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",               
             image_url: "https://www.pulshackdays.de/img/logos/puls-logo.png",
             buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/touch/",
-              title: "Open Web URL"
-            }, {
               type: "postback",
-              title: "Call Postback",
+              title: "Give me: Indie!",
               payload: "Payload for second bubble",
             }]
           }]
