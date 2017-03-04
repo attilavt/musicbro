@@ -2,9 +2,8 @@
  * Created by attila on 04.03.17.
  */
 
-var spotifyClient = require('./spotify_client');
 var lastfmClient = require('./lastfm_client');
-var debugMode = true;
+var debugMode = false;
 
 var debug = function (msg) {
     if(debugMode)
@@ -37,27 +36,32 @@ var listContains = function (list, string) {
 var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
 
     // step 2: enrich artists with top track
-    var enrichArtists = function (list) {
+    var getTracksForArtists = function (list) {
 
         var result = [];
-        var startedArtists = 0;
-        var finishedArtists = 0;
-        var itsFinished = function(artists) {
-            debug("FINISHED " + artists[0].artist);
-            result = result.concat(artists);
-            finishedArtists++;
-            if(startedArtists<=finishedArtists) {
-                debug("FINISHED TOTALLY");
+        var artistsWithEnrichmentStarted = 0;
+        var artistsWithEnrichmentFinished = 0;
+        var registerTracksForArtist = function(tracks) {
+            if(!tracks || !tracks[0]) {
+                debug("Tracks was empty!");
+                return;
+            }
+            result = result.concat(tracks);
+            artistsWithEnrichmentFinished++;
+            var artist = tracks && tracks[0] ? tracks[0].artist : "-";
+            debug("FINISHED TRACKS OF ARTIST "+ artist + " , " +artistsWithEnrichmentFinished);
+            if(artistsWithEnrichmentStarted==artistsWithEnrichmentFinished) {
+                debug("FINISHED TRACKS TOTALLY " + artistsWithEnrichmentFinished + "/" +artistsWithEnrichmentStarted);
                 if(deepCallback) {
                     deepCallback(result);
                 }
 
             }
         };
-        var startArtist = function(artist) {
-            startedArtists++;
-            debug("STARTING " + artist);
-            spotifyClient.getArtistTopTracks(artist,null,1,itsFinished);
+        var getTracksForArtist = function(artist) {
+            artistsWithEnrichmentStarted++;
+            debug("STARTING TRACKS OF " + artist + " " + artistsWithEnrichmentStarted);
+            lastfmClient.getArtistTopTracks(artist,1,true,registerTracksForArtist);
         };
         var j = 0;
         for(var i = 0; i < list.length;i++) {
@@ -65,7 +69,7 @@ var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
             if(!listContains(knownLikes,artist)) {
                 debug("Artist " + artist + " not in list of known likes: " + knownLikes);
                 j++;
-                startArtist(artist);
+                getTracksForArtist(artist);
                 if(j>=limit) {
                     break;
                 }
@@ -78,7 +82,7 @@ var getSuggestions = function(knownLikes, genre, limit, deepCallback) {
 
     // step 1: get top artists for genre, filter out known likes
     var factor = 10;
-    lastfmClient.getTagTopArtists(genre, limit*factor, enrichArtists);
+    lastfmClient.getTagTopArtists(genre, limit*factor, getTracksForArtists);
 };
 
 module.exports = {
